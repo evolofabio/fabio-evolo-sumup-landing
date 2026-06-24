@@ -71,11 +71,19 @@
   .btn-secondary { padding: 11px 24px; background: transparent; color: var(--color-text-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; font-weight: 400; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
   .footer-strip { padding: 1rem 1.5rem; font-size: 11px; color: var(--color-text-tertiary); border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
   .sim-section { padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .sim-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
-  .sim-label { font-size: 13px; color: var(--color-text-secondary); min-width: 160px; }
-  .sim-results { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sim-form { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; display: grid; gap: 1rem; }
+  .sim-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sim-label { font-size: 13px; color: var(--color-text-secondary); min-width: 200px; flex-shrink: 0; }
+  .sim-input-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; }
+  .sim-input { width: 100px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); background: #fff; }
+  .sim-input:focus { outline: none; border-color: var(--color-border-info); box-shadow: 0 0 0 2px var(--color-background-info); }
+  .sim-input-suffix { font-size: 13px; color: var(--color-text-tertiary); white-space: nowrap; }
+  .sim-range { flex: 1; min-width: 120px; accent-color: var(--color-text-info); }
+  .sim-hint { font-size: 11px; color: var(--color-text-tertiary); margin-top: -0.25rem; padding-left: 212px; }
+  .sim-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1rem; }
   .sim-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.9rem 1rem; text-align: center; }
   .sim-card.best { background: var(--color-background-info); }
+  .sim-card.current { border: 0.5px solid var(--color-border-secondary); }
   .sim-provider { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
   .sim-card.best .sim-provider { color: var(--color-text-info); }
   .sim-cost { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--color-text-primary); }
@@ -83,6 +91,8 @@
   .sim-annual { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
   .sim-card.best .sim-annual { color: var(--color-text-info); }
   .best-badge { display: inline-block; background: var(--color-background-success); color: var(--color-text-success); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; margin-top: 4px; }
+  .saving-result { padding: 0.9rem 1.1rem; background: var(--color-background-success); border-radius: var(--border-radius-md); border-left: 3px solid var(--color-border-success); font-size: 13px; color: var(--color-text-success); line-height: 1.5; }
+  .saving-result strong { font-weight: 600; }
   .wa-float { position: static; display: flex; align-items: center; justify-content: center; margin: 1rem 1.5rem 0; }
   .wa-sticky { display: flex; align-items: center; gap: 8px; background: #25D366; color: #fff; padding: 11px 22px; border-radius: 30px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; text-decoration: none; border: none; cursor: pointer; }
 </style>
@@ -98,7 +108,7 @@
       </div>
       <h1 class="hero-name">Fabio<br><em>Evolo</em></h1>
       <p class="hero-title">Consulente per i pagamenti digitali · Vibo Valentia &amp; Calabria</p>
-      <p class="hero-desc">Ti aiuto a scegliere la soluzione POS giusta per la tua attività. Nessun canone mensile, attivazione rapida, assistenza personalizzata.</p>
+      <p class="hero-desc">Ti aiuto a scegliere la soluzione POS giusta per la tua attività. Commissioni personalizzate su misura, 0% con SumUp Pay, nessun canone mensile e assistenza diretta.</p>
       <a class="wa-btn" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20vorrei%20informazioni%20su%20SumUp" target="_blank">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Scrivimi su WhatsApp
@@ -109,16 +119,16 @@
 
   <div class="stats-row">
     <div class="stat-item">
-      <span class="stat-num">1,95%</span>
-      <span class="stat-label">commissione flat</span>
+      <span class="stat-num">Su misura</span>
+      <span class="stat-label">commissioni personalizzate</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">0%</span>
+      <span class="stat-label">con SumUp Pay</span>
     </div>
     <div class="stat-item">
       <span class="stat-num">€0</span>
       <span class="stat-label">canone mensile</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num">24h</span>
-      <span class="stat-label">accredito fondi</span>
     </div>
   </div>
 
@@ -147,6 +157,13 @@
         </div>
       </div>
       <div class="benefit-card">
+        <i class="ti ti-adjustments" aria-hidden="true" style="font-size:20px; color:var(--color-text-info); flex-shrink:0; margin-top:1px;"></i>
+        <div>
+          <p class="benefit-title">Commissioni su misura</p>
+          <p class="benefit-body">Tariffe personalizzate in base al tuo transato. Con SumUp Pay incassi a commissione zero.</p>
+        </div>
+      </div>
+      <div class="benefit-card">
         <i class="ti ti-lock-open" aria-hidden="true" style="font-size:20px; color:var(--color-text-info); flex-shrink:0; margin-top:1px;"></i>
         <div>
           <p class="benefit-title">Senza vincoli</p>
@@ -170,11 +187,18 @@
       <div class="compare-col-head">myPOS</div>
     </div>
     <div class="compare-row">
-      <div class="compare-label"><i class="ti ti-percentage" aria-hidden="true" style="font-size:14px;"></i> Commissione</div>
-      <div class="compare-cell highlight"><span class="rate-big" id="sumupRate">1,95%</span></div>
+      <div class="compare-label"><i class="ti ti-percentage" aria-hidden="true" style="font-size:14px;"></i> Commissione POS</div>
+      <div class="compare-cell highlight"><span class="rate-big" id="sumupRate" style="font-size:15px;">Su misura</span></div>
       <div class="compare-cell"><span class="rate-big">1,89%</span></div>
       <div class="compare-cell"><span class="rate-big">1,75%*</span></div>
       <div class="compare-cell"><span class="rate-big">1,20%</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label"><i class="ti ti-qrcode" aria-hidden="true" style="font-size:14px;"></i> SumUp Pay</div>
+      <div class="compare-cell highlight"><span class="rate-big" id="sumupPayRate">0%</span></div>
+      <div class="compare-cell"><i class="ti ti-x cross"></i></div>
+      <div class="compare-cell"><i class="ti ti-x cross"></i></div>
+      <div class="compare-cell"><i class="ti ti-x cross"></i></div>
     </div>
     <div class="compare-row">
       <div class="compare-label"><i class="ti ti-calendar-off" aria-hidden="true" style="font-size:14px;"></i> Canone mensile</div>
@@ -192,7 +216,7 @@
     </div>
     <div class="compare-row">
       <div class="compare-label"><i class="ti ti-globe" aria-hidden="true" style="font-size:14px;"></i> Carte internazionali</div>
-      <div class="compare-cell highlight" id="sumupIntl">Incluse 1,95%</div>
+      <div class="compare-cell highlight" id="sumupIntl">Incluse</div>
       <div class="compare-cell">+2,39%</div>
       <div class="compare-cell">variabile</div>
       <div class="compare-cell">1,65%</div>
@@ -220,19 +244,41 @@
     </div>
     <div id="planCallout" class="saving-callout" style="display:none;">
       <i class="ti ti-sparkles" aria-hidden="true"></i>
-      <span>Con SumUp One a €19/mese, le commissioni scendono allo <strong>0,95%</strong> per carte nazionali. Conviene da 2.250€/mese di transato.</span>
+      <span>Con SumUp One a €19/mese ottieni <strong>commissioni personalizzate ancora più vantaggiose</strong> sul transato POS. Conviene da 2.250€/mese.</span>
     </div>
-    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:12px;">* Zettle: tariffa variabile per volume. myPOS richiede conto dedicato e canone. Dati aggiornati 2025/26.</p>
+    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:12px;">* Zettle: tariffa variabile per volume. myPOS richiede conto dedicato e canone. Le commissioni SumUp sono personalizzate in base al profilo dell'attività. SumUp Pay: 0% di commissione sugli incassi tramite app. Dati aggiornati 2025/26.</p>
   </div>
 
   <div class="sim-section">
-    <p class="section-eyebrow">Simulatore risparmio annuale</p>
-    <div class="sim-row">
-      <span class="sim-label">Transato mensile stimato</span>
-      <input type="range" id="volume" min="500" max="20000" step="500" value="4000" style="flex:1;">
-      <span style="font-size:14px; font-weight:500; min-width:72px; text-align:right;" id="volOut">€4.000</span>
+    <p class="section-eyebrow">Simulatore risparmio</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem; line-height:1.5;">Inserisci i dati del tuo operatore attuale per confrontare i costi con SumUp.</p>
+    <div class="sim-form">
+      <div class="sim-row">
+        <span class="sim-label">Incasso mensile con POS</span>
+        <div class="sim-input-wrap">
+          <input type="range" class="sim-range" id="volume" min="500" max="50000" step="500" value="4000">
+          <input type="text" class="sim-input" id="volumeInput" inputmode="decimal" value="4000" aria-label="Incasso mensile in euro">
+          <span class="sim-input-suffix">€/mese</span>
+        </div>
+      </div>
+      <div class="sim-row">
+        <span class="sim-label">Commissione operatore attuale</span>
+        <div class="sim-input-wrap">
+          <input type="text" class="sim-input" id="currentRate" inputmode="decimal" value="1,89" aria-label="Commissione operatore attuale in percentuale">
+          <span class="sim-input-suffix">%</span>
+        </div>
+      </div>
+      <div class="sim-row">
+        <span class="sim-label">Canone mensile (opzionale)</span>
+        <div class="sim-input-wrap">
+          <input type="text" class="sim-input" id="currentFixed" inputmode="decimal" value="0" aria-label="Canone mensile operatore attuale in euro">
+          <span class="sim-input-suffix">€/mese</span>
+        </div>
+      </div>
     </div>
     <div class="sim-results" id="simResults"></div>
+    <div id="savingResult" class="saving-result"></div>
+    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:10px;">Le commissioni SumUp POS sono stime indicative: contattami per una tariffa personalizzata su misura.</p>
   </div>
 
   <div class="cta-section">
@@ -259,18 +305,58 @@
 </div>
 
 <script>
+  const SUMUP_RATES = {
+    base: { pos: 0.0175, pay: 0, label: 'Su misura' },
+    plus: { pos: 0.0095, pay: 0, label: 'Su misura*' },
+  };
+
+  function parseNum(val) {
+    if (!val || !String(val).trim()) return 0;
+    let s = String(val).trim().replace(/\s/g, '');
+    if (s.includes(',')) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else if (/\.\d{3}$/.test(s) || s.split('.').length > 2) {
+      s = s.replace(/\./g, '');
+    }
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function formatEuro(n) {
+    return '€' + Math.round(n).toLocaleString('it-IT');
+  }
+
+  function getActivePlanKey() {
+    const active = document.querySelector('.plan-btn.active');
+    return active && active.textContent.includes('One') ? 'plus' : 'base';
+  }
+
+  function syncVolumeFromSlider() {
+    const vol = parseInt(document.getElementById('volume').value, 10);
+    document.getElementById('volumeInput').value = vol.toLocaleString('it-IT');
+    updateSim();
+  }
+
+  function syncVolumeFromInput() {
+    const raw = parseNum(document.getElementById('volumeInput').value);
+    const vol = Math.min(50000, Math.max(500, Math.round(raw / 500) * 500 || 500));
+    document.getElementById('volume').value = vol;
+    document.getElementById('volumeInput').value = vol.toLocaleString('it-IT');
+    updateSim();
+  }
+
   function showPlan(plan, e) {
     document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
     const rateCell = document.getElementById('sumupRate');
     const canoneCell = document.getElementById('sumupCanone');
     const callout = document.getElementById('planCallout');
+    const rates = SUMUP_RATES[plan];
+    rateCell.textContent = rates.label;
     if (plan === 'plus') {
-      rateCell.textContent = '0,95%';
       canoneCell.innerHTML = '€19/mese';
       callout.style.display = 'flex';
     } else {
-      rateCell.textContent = '1,95%';
       canoneCell.innerHTML = '<i class="ti ti-check check"></i>';
       callout.style.display = 'none';
     }
@@ -278,30 +364,91 @@
   }
 
   function updateSim() {
-    const vol = parseInt(document.getElementById('volume').value);
-    document.getElementById('volOut').textContent = '€' + vol.toLocaleString('it-IT');
-    const active = document.querySelector('.plan-btn.active').textContent;
-    const sumupRate = active.includes('One') ? 0.0095 : 0.0195;
-    const sumupFixed = active.includes('One') ? 19 : 0;
+    const vol = parseInt(document.getElementById('volume').value, 10);
+    const currentRate = parseNum(document.getElementById('currentRate').value) / 100;
+    const currentFixed = parseNum(document.getElementById('currentFixed').value);
+    const planKey = getActivePlanKey();
+    const sumupRates = SUMUP_RATES[planKey];
+    const sumupFixed = planKey === 'plus' ? 19 : 0;
+
+    const currentMonthly = currentRate * vol + currentFixed;
+    const currentAnnual = currentMonthly * 12;
+    const sumupPosMonthly = sumupRates.pos * vol + sumupFixed;
+    const sumupPosAnnual = sumupPosMonthly * 12;
+    const sumupPayMonthly = 0;
+    const sumupPayAnnual = 0;
+
+    const currentRatePct = (currentRate * 100).toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+
     const data = [
-      { name: 'SumUp', rate: sumupRate, fixed: sumupFixed, isMain: true },
-      { name: 'Nexi', rate: 0.0189, fixed: 2.5 },
-      { name: 'Zettle', rate: 0.0175, fixed: 0 },
-      { name: 'myPOS', rate: 0.012, fixed: 15 },
+      {
+        name: 'Il tuo operatore',
+        monthly: currentMonthly,
+        annual: currentAnnual,
+        note: currentRatePct + '%' + (currentFixed > 0 ? ' + ' + formatEuro(currentFixed) : ''),
+        cssClass: 'current',
+      },
+      {
+        name: 'SumUp POS',
+        monthly: sumupPosMonthly,
+        annual: sumupPosAnnual,
+        note: 'stima personalizzata',
+        cssClass: '',
+      },
+      {
+        name: 'SumUp Pay',
+        monthly: sumupPayMonthly,
+        annual: sumupPayAnnual,
+        note: '0% commissione',
+        cssClass: '',
+      },
     ];
-    const costs = data.map(p => ({ ...p, monthly: p.rate * vol + p.fixed, annual: (p.rate * vol + p.fixed) * 12 }));
-    const minCost = Math.min(...costs.map(c => c.monthly));
-    document.getElementById('simResults').innerHTML = costs.map(c => {
-      const isBest = Math.abs(c.monthly - minCost) < 0.01;
-      return `<div class="sim-card ${isBest ? 'best' : ''}">
+
+    const sumupOptions = data.slice(1);
+    const minSumup = Math.min(...sumupOptions.map(c => c.monthly));
+
+    document.getElementById('simResults').innerHTML = data.map(c => {
+      const isSumUpPay = c.name === 'SumUp Pay';
+      const isBest = isSumUpPay || (c.name === 'SumUp POS' && c.monthly <= currentMonthly && c.monthly === minSumup);
+      const costDisplay = isSumUpPay
+        ? '€0<span style="font-size:12px;">/mese</span>'
+        : `${formatEuro(c.monthly)}<span style="font-size:12px;">/mese</span>`;
+      return `<div class="sim-card ${isBest ? 'best' : ''} ${c.cssClass}">
         <p class="sim-provider">${c.name}</p>
-        <p class="sim-cost">€${c.monthly.toFixed(0)}<span style="font-size:12px;">/mese</span></p>
-        <p class="sim-annual">€${c.annual.toFixed(0)}/anno</p>
-        ${isBest ? '<span class="best-badge">Più conveniente</span>' : ''}
+        <p class="sim-cost">${costDisplay}</p>
+        <p class="sim-annual">${formatEuro(c.annual)}/anno</p>
+        ${c.note ? `<p class="sim-annual" style="margin-top:4px;">${c.note}</p>` : ''}
+        ${isBest ? `<span class="best-badge">${isSumUpPay ? '0% commissione' : 'Più conveniente'}</span>` : ''}
       </div>`;
     }).join('');
+
+    const savingPos = currentAnnual - sumupPosAnnual;
+    const savingPay = currentAnnual - sumupPayAnnual;
+    const savingEl = document.getElementById('savingResult');
+
+    if (currentMonthly <= 0 && currentRate <= 0) {
+      savingEl.innerHTML = 'Inserisci incasso e commissione del tuo operatore per vedere il confronto.';
+      return;
+    }
+
+    if (savingPay > 0) {
+      const posLine = savingPos > 0
+        ? `Con <strong>SumUp POS</strong> risparmieresti circa <strong>${formatEuro(savingPos)}/anno</strong>. `
+        : '';
+      savingEl.innerHTML = `${posLine}Con <strong>SumUp Pay</strong> risparmieresti <strong>${formatEuro(savingPay)}/anno</strong> rispetto al tuo operatore attuale (${currentRatePct}%).`;
+    } else if (savingPos > 0) {
+      savingEl.innerHTML = `Con <strong>SumUp POS</strong> risparmieresti circa <strong>${formatEuro(savingPos)}/anno</strong> rispetto al tuo operatore attuale.`;
+    } else {
+      savingEl.innerHTML = `Contattami per una <strong>commissione personalizzata</strong>: in base al tuo profilo posso offrirti condizioni competitive rispetto al tuo operatore attuale (${currentRatePct}%).`;
+    }
   }
 
-  document.getElementById('volume').addEventListener('input', updateSim);
+  document.getElementById('volume').addEventListener('input', syncVolumeFromSlider);
+  document.getElementById('volumeInput').addEventListener('change', syncVolumeFromInput);
+  document.getElementById('volumeInput').addEventListener('blur', syncVolumeFromInput);
+  document.getElementById('currentRate').addEventListener('input', updateSim);
+  document.getElementById('currentRate').addEventListener('change', updateSim);
+  document.getElementById('currentFixed').addEventListener('input', updateSim);
+  document.getElementById('currentFixed').addEventListener('change', updateSim);
   updateSim();
 </script>
