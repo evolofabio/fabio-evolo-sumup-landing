@@ -1,4 +1,11 @@
-
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fabio Evolo · Agente SumUp · Calcola il risparmio POS</title>
+  <meta name="description" content="Consulente SumUp in Calabria. Commissioni personalizzate, 0% con SumUp Pay e simulatore risparmio per confrontare i costi del tuo POS.">
+  <meta name="theme-color" content="#11477a">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
   @import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css');
@@ -45,7 +52,8 @@
   .benefit-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.1rem; display: flex; gap: 10px; align-items: flex-start; }
   .benefit-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; color: var(--color-text-primary); }
   .benefit-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
-  .compare-section { padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .compare-section { padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); overflow-x: auto; }
+  .compare-table { min-width: 640px; }
   .compare-header { display: grid; grid-template-columns: 160px repeat(4, 1fr); }
   .compare-col-head { padding: 10px 12px; font-size: 12px; font-weight: 500; text-align: center; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
   .compare-col-head.highlight { background: var(--color-background-info); color: var(--color-text-info); border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; }
@@ -71,31 +79,88 @@
   .btn-secondary { padding: 11px 24px; background: transparent; color: var(--color-text-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; font-weight: 400; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
   .footer-strip { padding: 1rem 1.5rem; font-size: 11px; color: var(--color-text-tertiary); border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
   .sim-section { padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .sim-form { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; display: grid; gap: 1rem; }
-  .sim-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .sim-label { font-size: 13px; color: var(--color-text-secondary); min-width: 200px; flex-shrink: 0; }
-  .sim-input-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; }
-  .sim-input { width: 100px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); background: #fff; }
-  .sim-input:focus { outline: none; border-color: var(--color-border-info); box-shadow: 0 0 0 2px var(--color-background-info); }
+  .sim-intro { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.25rem; line-height: 1.55; max-width: 42em; }
+  .sim-client-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 1rem; align-items: end; }
+  .sim-input-wide { max-width: none !important; width: 100%; }
+  .sim-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
+  .preset-btn { padding: 7px 12px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: #fff; color: var(--color-text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .preset-btn:hover { border-color: var(--color-border-info); color: var(--color-text-info); }
+  .preset-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .sim-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+  .sim-panel { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.15rem; display: grid; gap: 0.85rem; }
+  .sim-panel.propose { background: var(--color-background-info); }
+  .sim-panel-title { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-tertiary); }
+  .sim-panel.propose .sim-panel-title { color: var(--color-text-info); }
+  .sim-field { display: grid; gap: 6px; }
+  .sim-label { font-size: 12px; color: var(--color-text-secondary); }
+  .sim-input-wrap { display: flex; align-items: center; gap: 8px; }
+  .sim-input { width: 100%; max-width: 120px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); background: #fff; }
+  .sim-input:focus { outline: none; border-color: var(--color-border-info); box-shadow: 0 0 0 2px rgba(17,71,122,0.08); }
   .sim-input-suffix { font-size: 13px; color: var(--color-text-tertiary); white-space: nowrap; }
-  .sim-range { flex: 1; min-width: 120px; accent-color: var(--color-text-info); }
-  .sim-hint { font-size: 11px; color: var(--color-text-tertiary); margin-top: -0.25rem; padding-left: 212px; }
-  .sim-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1rem; }
-  .sim-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.9rem 1rem; text-align: center; }
-  .sim-card.best { background: var(--color-background-info); }
-  .sim-card.current { border: 0.5px solid var(--color-border-secondary); }
-  .sim-provider { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
-  .sim-card.best .sim-provider { color: var(--color-text-info); }
-  .sim-cost { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--color-text-primary); }
-  .sim-card.best .sim-cost { color: var(--color-text-info); }
-  .sim-annual { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
-  .sim-card.best .sim-annual { color: var(--color-text-info); }
-  .best-badge { display: inline-block; background: var(--color-background-success); color: var(--color-text-success); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; margin-top: 4px; }
-  .saving-result { padding: 0.9rem 1.1rem; background: var(--color-background-success); border-radius: var(--border-radius-md); border-left: 3px solid var(--color-border-success); font-size: 13px; color: var(--color-text-success); line-height: 1.5; }
-  .saving-result strong { font-weight: 600; }
-  .wa-float { position: static; display: flex; align-items: center; justify-content: center; margin: 1rem 1.5rem 0; }
-  .wa-sticky { display: flex; align-items: center; gap: 8px; background: #25D366; color: #fff; padding: 11px 22px; border-radius: 30px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; text-decoration: none; border: none; cursor: pointer; }
+  .sim-range { width: 100%; accent-color: var(--color-text-info); }
+  .sim-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-secondary); }
+  .sim-check input { accent-color: var(--color-text-info); }
+  .sim-volume-row { display: grid; gap: 8px; margin-bottom: 1rem; }
+  .sim-volume-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sim-scenarios { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .scenario { padding: 1rem 1.1rem; border-radius: var(--border-radius-lg); background: var(--color-background-secondary); border: 0.5px solid transparent; }
+  .scenario.best { background: var(--color-background-success); border-color: var(--color-border-success); }
+  .scenario-title { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 0.35rem; }
+  .scenario.best .scenario-title { color: var(--color-text-success); }
+  .scenario-amount { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1.1; color: var(--color-text-primary); }
+  .scenario-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 0.35rem; line-height: 1.4; }
+  .sim-hero { text-align: center; padding: 1.4rem 1.2rem; margin-bottom: 1rem; background: linear-gradient(160deg, #e8f7ed 0%, #f4f5f7 55%, #eaf3ff 100%); border-radius: var(--border-radius-lg); }
+  .sim-hero-label { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-success); margin-bottom: 0.35rem; }
+  .sim-hero-amount { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 8vw, 48px); line-height: 1; color: var(--color-text-primary); }
+  .sim-hero-sub { font-size: 14px; color: var(--color-text-secondary); margin-top: 0.55rem; }
+  .sim-hero-sub strong { color: var(--color-text-primary); font-weight: 500; }
+  .sim-hero.neutral .sim-hero-label { color: var(--color-text-info); }
+  .sim-hero.warn .sim-hero-label { color: var(--color-text-danger); }
+  .sim-bars { display: grid; gap: 10px; margin-bottom: 1rem; }
+  .sim-bar-row { display: grid; grid-template-columns: 110px 1fr 70px; gap: 10px; align-items: center; font-size: 12px; color: var(--color-text-secondary); }
+  .sim-bar-track { height: 10px; background: var(--color-background-secondary); border-radius: 999px; overflow: hidden; }
+  .sim-bar-fill { height: 100%; border-radius: 999px; background: #9aa3b2; transition: width 0.35s ease; }
+  .sim-bar-fill.sumup { background: var(--color-text-info); }
+  .sim-bar-val { text-align: right; font-weight: 500; color: var(--color-text-primary); }
+  .sim-breakdown { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 13px; }
+  .sim-breakdown th, .sim-breakdown td { padding: 10px 8px; text-align: right; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .sim-breakdown th:first-child, .sim-breakdown td:first-child { text-align: left; color: var(--color-text-secondary); }
+  .sim-breakdown th { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; }
+  .sim-breakdown .col-sumup { color: var(--color-text-info); font-weight: 500; }
+  .sim-breakdown .row-total td { font-weight: 500; color: var(--color-text-primary); border-bottom: none; padding-top: 12px; }
+  .sim-breakdown .row-save td { color: var(--color-text-success); border-bottom: none; padding-top: 4px; }
+  .sim-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .sim-footnote { font-size: 11px; color: var(--color-text-tertiary); line-height: 1.5; }
+  .sim-history { margin-top: 1rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .sim-history-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 0.6rem; }
+  .sim-history-title { font-size: 12px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; margin: 0; }
+  .link-btn { background: none; border: none; padding: 0; font-size: 11px; color: var(--color-text-info); cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; }
+  .history-list { display: grid; gap: 6px; }
+  .history-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); font-size: 12px; border: none; width: 100%; text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); }
+  .history-item:hover { background: var(--color-background-info); }
+  .history-meta { color: var(--color-text-tertiary); }
+  .print-sheet { display: none; }
+  @media (max-width: 640px) {
+    .sim-panels, .sim-scenarios, .sim-client-row { grid-template-columns: 1fr; }
+    .sim-bar-row { grid-template-columns: 90px 1fr 60px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .hero, .stats-row, .section, .compare-section, .cta-section, .footer-strip, .sim-presets, .sim-panels, .sim-volume-row, .sim-actions, .sim-history, .sim-intro, .sim-client-row, .wa-float { display: none !important; }
+    .sim-section { border: none; padding: 0; }
+    .print-sheet { display: block !important; padding: 0; }
+    .print-sheet h1 { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 0.3rem; }
+    .print-sheet .print-meta { font-size: 13px; color: #4f4f57; margin-bottom: 1.2rem; }
+    .print-sheet .print-big { font-family: 'DM Serif Display', serif; font-size: 42px; margin: 0.8rem 0 0.3rem; }
+    .print-sheet table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+    .print-sheet th, .print-sheet td { border-bottom: 1px solid #e7e8ed; padding: 8px 6px; text-align: right; }
+    .print-sheet th:first-child, .print-sheet td:first-child { text-align: left; }
+    .print-sheet .print-note { font-size: 11px; color: #7a7a86; margin-top: 1.5rem; }
+    .print-sheet .print-sign { margin-top: 2rem; font-size: 13px; }
+  }
 </style>
+</head>
+<body>
 
 <div class="lp">
   <h2 style="position:absolute;left:-9999px">Landing page di Fabio Evolo, agente ufficiale SumUp</h2>
@@ -109,10 +174,13 @@
       <h1 class="hero-name">Fabio<br><em>Evolo</em></h1>
       <p class="hero-title">Consulente per i pagamenti digitali · Vibo Valentia &amp; Calabria</p>
       <p class="hero-desc">Ti aiuto a scegliere la soluzione POS giusta per la tua attività. Commissioni personalizzate su misura, 0% con SumUp Pay, nessun canone mensile e assistenza diretta.</p>
-      <a class="wa-btn" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20vorrei%20informazioni%20su%20SumUp" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Scrivimi su WhatsApp
-      </a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <a class="wa-btn" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20vorrei%20informazioni%20su%20SumUp" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Scrivimi su WhatsApp
+        </a>
+        <a class="btn-secondary" href="#simulatore" style="text-decoration:none;">Calcola il risparmio</a>
+      </div>
     </div>
     <div class="avatar">FE</div>
   </div>
@@ -179,6 +247,7 @@
       <button class="plan-btn active" onclick="showPlan('base', event)">Senza canone</button>
       <button class="plan-btn" onclick="showPlan('plus', event)">SumUp One (€19/mese)</button>
     </div>
+    <div class="compare-table">
     <div class="compare-header">
       <div class="compare-col-head" style="text-align:left; border-right:0.5px solid var(--color-border-tertiary);"></div>
       <div class="compare-col-head highlight">SumUp</div>
@@ -246,52 +315,161 @@
       <i class="ti ti-sparkles" aria-hidden="true"></i>
       <span>Con SumUp One a €19/mese ottieni <strong>commissioni personalizzate ancora più vantaggiose</strong> sul transato POS. Conviene da 2.250€/mese.</span>
     </div>
-    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:12px;">* Zettle: tariffa variabile per volume. myPOS richiede conto dedicato e canone. Le commissioni SumUp sono personalizzate in base al profilo dell'attività. SumUp Pay: 0% di commissione sugli incassi tramite app. Dati aggiornati giugno 2026.</p>
+    </div>
+    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:12px;">* Zettle: tariffa variabile per volume. myPOS richiede conto dedicato e canone. Le commissioni SumUp sono personalizzate in base al profilo dell'attività. SumUp Pay: 0% di commissione sugli incassi tramite app. Dati aggiornati ottobre 2026.</p>
   </div>
 
-  <div class="sim-section">
-    <p class="section-eyebrow">Simulatore risparmio</p>
-    <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem; line-height:1.5;">Inserisci i dati del tuo operatore attuale per confrontare i costi con SumUp.</p>
-    <div class="sim-form">
-      <div class="sim-row">
-        <span class="sim-label">Incasso mensile con POS</span>
-        <div class="sim-input-wrap">
-          <input type="range" class="sim-range" id="volume" min="500" max="50000" step="500" value="4000">
-          <input type="text" class="sim-input" id="volumeInput" inputmode="decimal" value="4000" aria-label="Incasso mensile in euro">
-          <span class="sim-input-suffix">€/mese</span>
-        </div>
+  <div class="sim-section" id="simulatore">
+    <p class="section-eyebrow">Tool consulenza · Risparmio reale</p>
+    <p class="sim-intro">Per uso in sede o in videochiamata: carica un profilo, inserisci i dati del cliente e mostra subito il risparmio. Poi stampa la scheda o inviala su WhatsApp.</p>
+
+    <div class="sim-client-row">
+      <div class="sim-field">
+        <label class="sim-label" for="clientName">Nome attività / cliente</label>
+        <input type="text" class="sim-input sim-input-wide" id="clientName" placeholder="es. Bar Centrale" autocomplete="off">
       </div>
-      <div class="sim-row">
-        <span class="sim-label">Commissione operatore attuale</span>
+      <button type="button" class="btn-secondary" id="saveHistoryBtn" style="height:38px;">Salva in storico</button>
+    </div>
+
+    <div class="sim-presets" id="presetButtons" aria-label="Profili attività"></div>
+
+    <div class="sim-volume-row">
+      <label class="sim-label" for="volumeInput">Incasso mensile con carte / POS</label>
+      <div class="sim-volume-controls">
+        <input type="range" class="sim-range" id="volume" min="500" max="50000" step="500" value="4000" aria-label="Incasso mensile">
         <div class="sim-input-wrap">
-          <input type="text" class="sim-input" id="currentRate" inputmode="decimal" value="1,89" aria-label="Commissione operatore attuale in percentuale">
-          <span class="sim-input-suffix">%</span>
-        </div>
-      </div>
-      <div class="sim-row">
-        <span class="sim-label">Canone mensile (opzionale)</span>
-        <div class="sim-input-wrap">
-          <input type="text" class="sim-input" id="currentFixed" inputmode="decimal" value="0" aria-label="Canone mensile operatore attuale in euro">
+          <input type="text" class="sim-input" id="volumeInput" inputmode="decimal" value="4.000" aria-label="Incasso mensile in euro">
           <span class="sim-input-suffix">€/mese</span>
         </div>
       </div>
     </div>
-    <div class="sim-results" id="simResults"></div>
-    <div id="savingResult" class="saving-result"></div>
-    <p style="font-size:11px; color:var(--color-text-tertiary); margin-top:10px;">Le commissioni SumUp POS sono stime indicative: contattami per una tariffa personalizzata su misura.</p>
+
+    <div class="sim-panels">
+      <div class="sim-panel">
+        <p class="sim-panel-title">Situazione attuale</p>
+        <div class="sim-field">
+          <label class="sim-label" for="currentRate">Commissione operatore</label>
+          <div class="sim-input-wrap">
+            <input type="text" class="sim-input" id="currentRate" inputmode="decimal" value="1,89">
+            <span class="sim-input-suffix">%</span>
+          </div>
+        </div>
+        <div class="sim-field">
+          <label class="sim-label" for="currentFixed">Canone / costi fissi</label>
+          <div class="sim-input-wrap">
+            <input type="text" class="sim-input" id="currentFixed" inputmode="decimal" value="0">
+            <span class="sim-input-suffix">€/mese</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-panel propose">
+        <p class="sim-panel-title">Proposta SumUp</p>
+        <div class="sim-field">
+          <label class="sim-label" for="sumupRateInput">Commissione SumUp POS</label>
+          <div class="sim-input-wrap">
+            <input type="text" class="sim-input" id="sumupRateInput" inputmode="decimal" value="1,75">
+            <span class="sim-input-suffix">%</span>
+          </div>
+        </div>
+        <div class="sim-field">
+          <label class="sim-label" for="sumupFixedInput">Canone SumUp</label>
+          <div class="sim-input-wrap">
+            <input type="text" class="sim-input" id="sumupFixedInput" inputmode="decimal" value="0">
+            <span class="sim-input-suffix">€/mese</span>
+          </div>
+        </div>
+        <div class="sim-field">
+          <label class="sim-label" for="payShare">Quota SumUp Pay <span id="payShareLabel">(20%)</span></label>
+          <input type="range" class="sim-range" id="payShare" min="0" max="100" step="5" value="20">
+          <p class="sim-footnote">Solo su questa quota la commissione è 0%.</p>
+        </div>
+        <div class="sim-field">
+          <label class="sim-label" for="hardwareCost">Costo POS SumUp (una tantum, opz.)</label>
+          <div class="sim-input-wrap">
+            <input type="text" class="sim-input" id="hardwareCost" inputmode="decimal" value="0">
+            <span class="sim-input-suffix">€</span>
+          </div>
+        </div>
+        <label class="sim-check">
+          <input type="checkbox" id="taxCredit" checked>
+          Includi credito d'imposta 30% sulle commissioni SumUp
+        </label>
+      </div>
+    </div>
+
+    <div class="sim-scenarios">
+      <div class="scenario" id="scenarioPos">
+        <p class="scenario-title">Solo POS</p>
+        <p class="scenario-amount" id="scenarioPosAmount">—</p>
+        <p class="scenario-sub" id="scenarioPosSub">Risparmio minimo senza SumUp Pay</p>
+      </div>
+      <div class="scenario best" id="scenarioMix">
+        <p class="scenario-title">POS + SumUp Pay</p>
+        <p class="scenario-amount" id="scenarioMixAmount">—</p>
+        <p class="scenario-sub" id="scenarioMixSub">Scenario con la quota Pay impostata</p>
+      </div>
+    </div>
+
+    <div class="sim-hero" id="savingHero">
+      <p class="sim-hero-label" id="savingHeroLabel">Risparmio stimato all'anno</p>
+      <p class="sim-hero-amount" id="savingHeroAmount">—</p>
+      <p class="sim-hero-sub" id="savingHeroSub">Inserisci i dati per calcolare il confronto.</p>
+    </div>
+
+    <div class="sim-bars" id="simBars" aria-hidden="false">
+      <div class="sim-bar-row">
+        <span>Attuale / anno</span>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="barCurrent" style="width:0%"></div></div>
+        <span class="sim-bar-val" id="barCurrentVal">€0</span>
+      </div>
+      <div class="sim-bar-row">
+        <span>SumUp / anno</span>
+        <div class="sim-bar-track"><div class="sim-bar-fill sumup" id="barSumup" style="width:0%"></div></div>
+        <span class="sim-bar-val" id="barSumupVal">€0</span>
+      </div>
+    </div>
+
+    <table class="sim-breakdown" aria-label="Dettaglio costi">
+      <thead>
+        <tr>
+          <th>Voce</th>
+          <th>Attuale</th>
+          <th class="col-sumup">Con SumUp</th>
+        </tr>
+      </thead>
+      <tbody id="simBreakdownBody"></tbody>
+    </table>
+
+    <div class="sim-actions">
+      <a class="btn-wa" id="simWhatsApp" href="https://wa.me/393465446724" target="_blank" rel="noopener">WhatsApp con numeri</a>
+      <button type="button" class="btn-secondary" id="printSheetBtn">Stampa scheda</button>
+      <button type="button" class="btn-secondary" id="copySummaryBtn">Copia riepilogo</button>
+    </div>
+    <p class="sim-footnote">Tool interno: la commissione SumUp è quella che proponi tu. Il credito d'imposta e l'ammortamento POS sono stime indicative. Non è un'offerta vincolante.</p>
+
+    <div class="sim-history">
+      <div class="sim-history-head">
+        <p class="sim-history-title">Ultime simulazioni (su questo dispositivo)</p>
+        <button type="button" class="link-btn" id="clearHistoryBtn">Svuota storico</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <div class="print-sheet" id="printSheet" aria-hidden="true"></div>
   </div>
 
   <div class="cta-section">
     <h2 class="cta-title">Pronto a iniziare?</h2>
     <p class="cta-sub">Contattami per una consulenza gratuita e senza impegno.</p>
     <div class="cta-buttons">
-      <a class="btn-wa" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20vorrei%20informazioni%20su%20SumUp" target="_blank">
+      <a class="btn-wa" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20vorrei%20informazioni%20su%20SumUp" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Scrivimi su WhatsApp
       </a>
-      <button class="btn-secondary" onclick="sendPrompt('Quali tipi di POS SumUp esistono e quale si adatta alla mia attività?')">
+      <a class="btn-secondary" href="https://wa.me/393465446724?text=Ciao%20Fabio%2C%20ho%20alcune%20domande%20su%20SumUp%20e%20sul%20POS" target="_blank" rel="noopener" style="text-decoration:none;">
         <i class="ti ti-help" aria-hidden="true"></i> Ho domande
-      </button>
+      </a>
     </div>
   </div>
 
@@ -306,9 +484,20 @@
 
 <script>
   const SUMUP_RATES = {
-    base: { pos: 0.0175, pay: 0, label: 'Su misura' },
-    plus: { pos: 0.0095, pay: 0, label: 'Su misura*' },
+    base: { pos: 0.0175, pay: 0, label: 'Su misura', fixed: 0 },
+    plus: { pos: 0.0095, pay: 0, label: 'Su misura*', fixed: 19 },
   };
+
+  const PRESETS = [
+    { id: 'bar', label: 'Bar', volume: 3500, currentRate: 1.89, currentFixed: 15, payShare: 15, sumupRate: 1.75, sumupFixed: 0 },
+    { id: 'ristorante', label: 'Ristorante', volume: 12000, currentRate: 1.95, currentFixed: 25, payShare: 25, sumupRate: 1.65, sumupFixed: 0 },
+    { id: 'negozio', label: 'Negozio', volume: 8000, currentRate: 1.75, currentFixed: 10, payShare: 10, sumupRate: 1.55, sumupFixed: 0 },
+    { id: 'professionista', label: 'Professionista', volume: 2500, currentRate: 2.2, currentFixed: 0, payShare: 40, sumupRate: 1.75, sumupFixed: 0 },
+    { id: 'custom', label: 'Personalizzato', volume: 4000, currentRate: 1.89, currentFixed: 0, payShare: 20, sumupRate: 1.75, sumupFixed: 0 },
+  ];
+
+  const HISTORY_KEY = 'sumupSimHistory_v1';
+  let lastCalc = null;
 
   function parseNum(val) {
     if (!val || !String(val).trim()) return 0;
@@ -326,23 +515,30 @@
     return '€' + Math.round(n).toLocaleString('it-IT');
   }
 
-  function getActivePlanKey() {
-    const active = document.querySelector('.plan-btn.active');
-    return active && active.textContent.includes('One') ? 'plus' : 'base';
+  function formatPct(n) {
+    return n.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function setVolume(vol) {
+    const v = Math.min(50000, Math.max(500, Math.round(vol / 500) * 500 || 500));
+    document.getElementById('volume').value = v;
+    document.getElementById('volumeInput').value = v.toLocaleString('it-IT');
   }
 
   function syncVolumeFromSlider() {
-    const vol = parseInt(document.getElementById('volume').value, 10);
-    document.getElementById('volumeInput').value = vol.toLocaleString('it-IT');
+    setVolume(parseInt(document.getElementById('volume').value, 10));
     updateSim();
   }
 
   function syncVolumeFromInput() {
-    const raw = parseNum(document.getElementById('volumeInput').value);
-    const vol = Math.min(50000, Math.max(500, Math.round(raw / 500) * 500 || 500));
-    document.getElementById('volume').value = vol;
-    document.getElementById('volumeInput').value = vol.toLocaleString('it-IT');
+    setVolume(parseNum(document.getElementById('volumeInput').value));
     updateSim();
+  }
+
+  function applyPlanDefaults(plan) {
+    const rates = SUMUP_RATES[plan];
+    document.getElementById('sumupRateInput').value = formatPct(rates.pos * 100);
+    document.getElementById('sumupFixedInput').value = String(rates.fixed);
   }
 
   function showPlan(plan, e) {
@@ -360,95 +556,317 @@
       canoneCell.innerHTML = '<i class="ti ti-check check"></i>';
       callout.style.display = 'none';
     }
+    applyPlanDefaults(plan);
     updateSim();
   }
 
-  function updateSim() {
-    const vol = parseInt(document.getElementById('volume').value, 10);
-    const currentRate = parseNum(document.getElementById('currentRate').value) / 100;
-    const currentFixed = parseNum(document.getElementById('currentFixed').value);
-    const planKey = getActivePlanKey();
-    const sumupRates = SUMUP_RATES[planKey];
-    const sumupFixed = planKey === 'plus' ? 19 : 0;
-
-    const currentMonthly = currentRate * vol + currentFixed;
+  function calcScenario(vol, currentRate, currentFixed, sumupRate, sumupFixed, payShare, hardwareCost, useTaxCredit) {
+    const volPos = vol * ((100 - payShare) / 100);
+    const currentFees = currentRate * vol;
+    const currentMonthly = currentFees + currentFixed;
     const currentAnnual = currentMonthly * 12;
-    const sumupPosMonthly = sumupRates.pos * vol + sumupFixed;
-    const sumupPosAnnual = sumupPosMonthly * 12;
-    const sumupPayMonthly = 0;
-    const sumupPayAnnual = 0;
 
-    const currentRatePct = (currentRate * 100).toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    const sumupPosFees = sumupRate * volPos;
+    const sumupMonthlyGross = sumupPosFees + sumupFixed;
+    const taxCreditMonthly = useTaxCredit ? sumupPosFees * 0.3 : 0;
+    const hardwareMonthly = hardwareCost > 0 ? hardwareCost / 12 : 0;
+    const sumupMonthlyNet = sumupMonthlyGross - taxCreditMonthly + hardwareMonthly;
+    const sumupAnnualNet = sumupMonthlyNet * 12;
 
-    const data = [
-      {
-        name: 'Il tuo operatore',
-        monthly: currentMonthly,
-        annual: currentAnnual,
-        note: currentRatePct + '%' + (currentFixed > 0 ? ' + ' + formatEuro(currentFixed) : ''),
-        cssClass: 'current',
-      },
-      {
-        name: 'SumUp POS',
-        monthly: sumupPosMonthly,
-        annual: sumupPosAnnual,
-        note: 'stima personalizzata',
-        cssClass: '',
-      },
-      {
-        name: 'SumUp Pay',
-        monthly: sumupPayMonthly,
-        annual: sumupPayAnnual,
-        note: '0% commissione',
-        cssClass: '',
-      },
-    ];
+    return {
+      currentFees,
+      currentMonthly,
+      currentAnnual,
+      sumupPosFees,
+      taxCreditMonthly,
+      hardwareMonthly,
+      sumupMonthlyGross,
+      sumupMonthlyNet,
+      sumupAnnualNet,
+      savingMonthly: currentMonthly - sumupMonthlyNet,
+      savingAnnual: currentAnnual - sumupAnnualNet,
+      payShare,
+    };
+  }
 
-    const sumupOptions = data.slice(1);
-    const minSumup = Math.min(...sumupOptions.map(c => c.monthly));
+  function readInputs() {
+    return {
+      clientName: (document.getElementById('clientName').value || '').trim(),
+      vol: parseInt(document.getElementById('volume').value, 10) || 0,
+      currentRatePct: parseNum(document.getElementById('currentRate').value),
+      currentFixed: parseNum(document.getElementById('currentFixed').value),
+      sumupRatePct: parseNum(document.getElementById('sumupRateInput').value),
+      sumupFixed: parseNum(document.getElementById('sumupFixedInput').value),
+      payShare: Math.min(100, Math.max(0, parseInt(document.getElementById('payShare').value, 10) || 0)),
+      hardwareCost: parseNum(document.getElementById('hardwareCost').value),
+      useTaxCredit: document.getElementById('taxCredit').checked,
+    };
+  }
 
-    document.getElementById('simResults').innerHTML = data.map(c => {
-      const isSumUpPay = c.name === 'SumUp Pay';
-      const isBest = isSumUpPay || (c.name === 'SumUp POS' && c.monthly <= currentMonthly && c.monthly === minSumup);
-      const costDisplay = isSumUpPay
-        ? '€0<span style="font-size:12px;">/mese</span>'
-        : `${formatEuro(c.monthly)}<span style="font-size:12px;">/mese</span>`;
-      return `<div class="sim-card ${isBest ? 'best' : ''} ${c.cssClass}">
-        <p class="sim-provider">${c.name}</p>
-        <p class="sim-cost">${costDisplay}</p>
-        <p class="sim-annual">${formatEuro(c.annual)}/anno</p>
-        ${c.note ? `<p class="sim-annual" style="margin-top:4px;">${c.note}</p>` : ''}
-        ${isBest ? `<span class="best-badge">${isSumUpPay ? '0% commissione' : 'Più conveniente'}</span>` : ''}
-      </div>`;
-    }).join('');
+  function updateSim() {
+    const i = readInputs();
+    document.getElementById('payShareLabel').textContent = '(' + i.payShare + '%)';
 
-    const savingPos = currentAnnual - sumupPosAnnual;
-    const savingPay = currentAnnual - sumupPayAnnual;
-    const savingEl = document.getElementById('savingResult');
+    const onlyPos = calcScenario(i.vol, i.currentRatePct / 100, i.currentFixed, i.sumupRatePct / 100, i.sumupFixed, 0, i.hardwareCost, i.useTaxCredit);
+    const withPay = calcScenario(i.vol, i.currentRatePct / 100, i.currentFixed, i.sumupRatePct / 100, i.sumupFixed, i.payShare, i.hardwareCost, i.useTaxCredit);
+    lastCalc = { inputs: i, onlyPos, withPay };
 
-    if (currentMonthly <= 0 && currentRate <= 0) {
-      savingEl.innerHTML = 'Inserisci incasso e commissione del tuo operatore per vedere il confronto.';
+    document.getElementById('scenarioPosAmount').textContent = formatEuro(Math.max(0, onlyPos.savingAnnual));
+    document.getElementById('scenarioPosSub').textContent = onlyPos.savingAnnual > 0
+      ? formatEuro(onlyPos.savingMonthly) + '/mese · 100% su POS'
+      : 'Nessun risparmio con questi parametri';
+
+    document.getElementById('scenarioMixAmount').textContent = formatEuro(Math.max(0, withPay.savingAnnual));
+    document.getElementById('scenarioMixSub').textContent = withPay.savingAnnual > 0
+      ? formatEuro(withPay.savingMonthly) + '/mese · ' + i.payShare + '% su SumUp Pay a 0%'
+      : 'Regola tariffa o quota Pay';
+
+    document.getElementById('scenarioMix').classList.toggle('best', withPay.savingAnnual >= onlyPos.savingAnnual);
+    document.getElementById('scenarioPos').classList.toggle('best', onlyPos.savingAnnual > withPay.savingAnnual);
+
+    const hero = document.getElementById('savingHero');
+    const heroLabel = document.getElementById('savingHeroLabel');
+    const heroAmount = document.getElementById('savingHeroAmount');
+    const heroSub = document.getElementById('savingHeroSub');
+    const nameBit = i.clientName ? ' per <strong>' + i.clientName.replace(/</g, '') + '</strong>' : '';
+
+    hero.classList.remove('neutral', 'warn');
+    if (i.vol <= 0 || (i.currentRatePct <= 0 && i.currentFixed <= 0)) {
+      hero.classList.add('neutral');
+      heroLabel.textContent = 'Risparmio stimato';
+      heroAmount.textContent = '—';
+      heroSub.textContent = 'Inserisci i dati del cliente o scegli un profilo.';
+    } else if (withPay.savingAnnual > 0) {
+      heroLabel.textContent = 'Risparmio stimato all\'anno';
+      heroAmount.textContent = formatEuro(withPay.savingAnnual);
+      heroSub.innerHTML = (nameBit ? 'Simulazione' + nameBit + ' · ' : '')
+        + 'Circa <strong>' + formatEuro(withPay.savingMonthly) + '/mese</strong>'
+        + (i.useTaxCredit ? ' (incluso credito d\'imposta 30%)' : '');
+    } else if (withPay.savingAnnual < 0) {
+      hero.classList.add('warn');
+      heroLabel.textContent = 'Differenza stimata';
+      heroAmount.textContent = '+' + formatEuro(Math.abs(withPay.savingAnnual));
+      heroSub.innerHTML = 'Con questi parametri SumUp costerebbe di più. Abbassa la tariffa o alza la quota Pay.';
+    } else {
+      hero.classList.add('neutral');
+      heroLabel.textContent = 'Costi equivalenti';
+      heroAmount.textContent = formatEuro(0);
+      heroSub.textContent = 'A parità di costi restano SumUp Pay e zero vincoli.';
+    }
+
+    const maxBar = Math.max(withPay.currentAnnual, withPay.sumupAnnualNet, 1);
+    document.getElementById('barCurrent').style.width = (withPay.currentAnnual / maxBar * 100) + '%';
+    document.getElementById('barSumup').style.width = (withPay.sumupAnnualNet / maxBar * 100) + '%';
+    document.getElementById('barCurrentVal').textContent = formatEuro(withPay.currentAnnual);
+    document.getElementById('barSumupVal').textContent = formatEuro(withPay.sumupAnnualNet);
+
+    const taxRow = i.useTaxCredit
+      ? `<tr><td>Credito d'imposta 30%</td><td>—</td><td class="col-sumup">−${formatEuro(withPay.taxCreditMonthly)}</td></tr>`
+      : '';
+    const hwRow = i.hardwareCost > 0
+      ? `<tr><td>POS ammortizzato (12 mesi)</td><td>—</td><td class="col-sumup">${formatEuro(withPay.hardwareMonthly)}</td></tr>`
+      : '';
+
+    document.getElementById('simBreakdownBody').innerHTML = `
+      <tr>
+        <td>Commissioni POS</td>
+        <td>${formatEuro(withPay.currentFees)}</td>
+        <td class="col-sumup">${formatEuro(withPay.sumupPosFees)}</td>
+      </tr>
+      <tr>
+        <td>SumUp Pay (${i.payShare}% volume)</td>
+        <td>${formatEuro(0)}</td>
+        <td class="col-sumup">${formatEuro(0)}</td>
+      </tr>
+      <tr>
+        <td>Canone mensile</td>
+        <td>${formatEuro(i.currentFixed)}</td>
+        <td class="col-sumup">${formatEuro(i.sumupFixed)}</td>
+      </tr>
+      ${taxRow}
+      ${hwRow}
+      <tr class="row-total">
+        <td>Totale / mese</td>
+        <td>${formatEuro(withPay.currentMonthly)}</td>
+        <td class="col-sumup">${formatEuro(withPay.sumupMonthlyNet)}</td>
+      </tr>
+      <tr class="row-total">
+        <td>Totale / anno</td>
+        <td>${formatEuro(withPay.currentAnnual)}</td>
+        <td class="col-sumup">${formatEuro(withPay.sumupAnnualNet)}</td>
+      </tr>
+      <tr class="row-save">
+        <td>Risparmio / anno (con Pay)</td>
+        <td colspan="2">${formatEuro(withPay.savingAnnual)}</td>
+      </tr>
+      <tr class="row-save">
+        <td>Risparmio / anno (solo POS)</td>
+        <td colspan="2">${formatEuro(onlyPos.savingAnnual)}</td>
+      </tr>
+    `;
+
+    const summary = buildSummary(i, onlyPos, withPay);
+    document.getElementById('simWhatsApp').href =
+      'https://wa.me/393465446724?text=' + encodeURIComponent(summary);
+    document.getElementById('printSheet').innerHTML = buildPrintHtml(i, onlyPos, withPay);
+  }
+
+  function buildSummary(i, onlyPos, withPay) {
+    const title = i.clientName ? 'Simulazione SumUp — ' + i.clientName : 'Simulazione SumUp';
+    return [
+      title,
+      'Incasso mensile: ' + formatEuro(i.vol),
+      'Attuale: ' + formatPct(i.currentRatePct) + '%' + (i.currentFixed ? ' + ' + formatEuro(i.currentFixed) + '/mese' : ''),
+      'Proposta SumUp POS: ' + formatPct(i.sumupRatePct) + '%' + (i.sumupFixed ? ' + ' + formatEuro(i.sumupFixed) + '/mese' : ''),
+      'Quota SumUp Pay: ' + i.payShare + '%',
+      'Costo attuale: ' + formatEuro(withPay.currentAnnual) + '/anno',
+      'Costo SumUp (con Pay): ' + formatEuro(withPay.sumupAnnualNet) + '/anno',
+      'Risparmio solo POS: ' + formatEuro(onlyPos.savingAnnual) + '/anno',
+      'Risparmio POS+Pay: ' + formatEuro(withPay.savingAnnual) + '/anno',
+      i.useTaxCredit ? 'Credito d\'imposta 30%: incluso nella stima' : 'Credito d\'imposta: non incluso',
+      'Fabio Evolo · Agente SumUp · +39 346 544 6724',
+    ].join('\n');
+  }
+
+  function buildPrintHtml(i, onlyPos, withPay) {
+    const today = new Date().toLocaleDateString('it-IT');
+    const name = i.clientName || 'Cliente';
+    return `
+      <h1>Scheda risparmio SumUp</h1>
+      <p class="print-meta">${name} · ${today} · Preparata da Fabio Evolo, agente ufficiale SumUp</p>
+      <p>Incasso mensile simulato: <strong>${formatEuro(i.vol)}</strong></p>
+      <p class="print-big">${formatEuro(Math.max(0, withPay.savingAnnual))}</p>
+      <p>Risparmio stimato all'anno con POS + SumUp Pay (${i.payShare}%)</p>
+      <table>
+        <tr><th></th><th>Attuale</th><th>SumUp</th></tr>
+        <tr><td>Totale / mese</td><td>${formatEuro(withPay.currentMonthly)}</td><td>${formatEuro(withPay.sumupMonthlyNet)}</td></tr>
+        <tr><td>Totale / anno</td><td>${formatEuro(withPay.currentAnnual)}</td><td>${formatEuro(withPay.sumupAnnualNet)}</td></tr>
+        <tr><td>Risparmio solo POS</td><td colspan="2">${formatEuro(onlyPos.savingAnnual)}/anno</td></tr>
+        <tr><td>Risparmio POS + Pay</td><td colspan="2">${formatEuro(withPay.savingAnnual)}/anno</td></tr>
+      </table>
+      <p>Commissione attuale ${formatPct(i.currentRatePct)}% · SumUp POS ${formatPct(i.sumupRatePct)}% · Pay ${i.payShare}% a 0%</p>
+      <p class="print-note">Stima indicativa e non vincolante. Tariffa SumUp soggetta a valutazione. ${i.useTaxCredit ? 'Include stima credito d\'imposta 30% sulle commissioni SumUp.' : ''}</p>
+      <p class="print-sign">Fabio Evolo · +39 346 544 6724 · WhatsApp disponibile</p>
+    `;
+  }
+
+  function applyPreset(preset, btn) {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    setVolume(preset.volume);
+    document.getElementById('currentRate').value = formatPct(preset.currentRate);
+    document.getElementById('currentFixed').value = String(preset.currentFixed);
+    document.getElementById('sumupRateInput').value = formatPct(preset.sumupRate);
+    document.getElementById('sumupFixedInput').value = String(preset.sumupFixed);
+    document.getElementById('payShare').value = String(preset.payShare);
+    updateSim();
+  }
+
+  function renderPresets() {
+    const wrap = document.getElementById('presetButtons');
+    wrap.innerHTML = PRESETS.map(p =>
+      `<button type="button" class="preset-btn" data-id="${p.id}">${p.label}</button>`
+    ).join('');
+    wrap.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = PRESETS.find(p => p.id === btn.dataset.id);
+        applyPreset(preset, btn);
+      });
+    });
+  }
+
+  function loadHistory() {
+    try {
+      return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    const items = loadHistory();
+    if (!items.length) {
+      list.innerHTML = '<p class="sim-footnote">Nessuna simulazione salvata ancora.</p>';
       return;
     }
+    list.innerHTML = items.map((item, idx) => `
+      <button type="button" class="history-item" data-idx="${idx}">
+        <span><strong>${item.clientName || 'Senza nome'}</strong> · ${formatEuro(item.savingAnnual)}/anno</span>
+        <span class="history-meta">${item.date}</span>
+      </button>
+    `).join('');
+    list.querySelectorAll('.history-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = items[parseInt(btn.dataset.idx, 10)];
+        if (!item) return;
+        document.getElementById('clientName').value = item.clientName || '';
+        setVolume(item.vol);
+        document.getElementById('currentRate').value = formatPct(item.currentRatePct);
+        document.getElementById('currentFixed').value = String(item.currentFixed);
+        document.getElementById('sumupRateInput').value = formatPct(item.sumupRatePct);
+        document.getElementById('sumupFixedInput').value = String(item.sumupFixed);
+        document.getElementById('payShare').value = String(item.payShare);
+        document.getElementById('hardwareCost').value = String(item.hardwareCost || 0);
+        document.getElementById('taxCredit').checked = !!item.useTaxCredit;
+        updateSim();
+      });
+    });
+  }
 
-    if (savingPay > 0) {
-      const posLine = savingPos > 0
-        ? `Con <strong>SumUp POS</strong> risparmieresti circa <strong>${formatEuro(savingPos)}/anno</strong>. `
-        : '';
-      savingEl.innerHTML = `${posLine}Con <strong>SumUp Pay</strong> risparmieresti <strong>${formatEuro(savingPay)}/anno</strong> rispetto al tuo operatore attuale (${currentRatePct}%).`;
-    } else if (savingPos > 0) {
-      savingEl.innerHTML = `Con <strong>SumUp POS</strong> risparmieresti circa <strong>${formatEuro(savingPos)}/anno</strong> rispetto al tuo operatore attuale.`;
-    } else {
-      savingEl.innerHTML = `Contattami per una <strong>commissione personalizzata</strong>: in base al tuo profilo posso offrirti condizioni competitive rispetto al tuo operatore attuale (${currentRatePct}%).`;
-    }
+  function saveHistory() {
+    if (!lastCalc) return;
+    const i = lastCalc.inputs;
+    const entry = {
+      clientName: i.clientName,
+      vol: i.vol,
+      currentRatePct: i.currentRatePct,
+      currentFixed: i.currentFixed,
+      sumupRatePct: i.sumupRatePct,
+      sumupFixed: i.sumupFixed,
+      payShare: i.payShare,
+      hardwareCost: i.hardwareCost,
+      useTaxCredit: i.useTaxCredit,
+      savingAnnual: Math.round(lastCalc.withPay.savingAnnual),
+      date: new Date().toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+    };
+    const items = loadHistory().filter(x => !(x.clientName === entry.clientName && x.vol === entry.vol));
+    items.unshift(entry);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 8)));
+    renderHistory();
   }
 
   document.getElementById('volume').addEventListener('input', syncVolumeFromSlider);
   document.getElementById('volumeInput').addEventListener('change', syncVolumeFromInput);
   document.getElementById('volumeInput').addEventListener('blur', syncVolumeFromInput);
-  document.getElementById('currentRate').addEventListener('input', updateSim);
-  document.getElementById('currentRate').addEventListener('change', updateSim);
-  document.getElementById('currentFixed').addEventListener('input', updateSim);
-  document.getElementById('currentFixed').addEventListener('change', updateSim);
+  ['clientName', 'currentRate', 'currentFixed', 'sumupRateInput', 'sumupFixedInput', 'payShare', 'hardwareCost', 'taxCredit'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateSim);
+    document.getElementById(id).addEventListener('change', updateSim);
+  });
+  document.getElementById('saveHistoryBtn').addEventListener('click', saveHistory);
+  document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  });
+  document.getElementById('printSheetBtn').addEventListener('click', () => {
+    updateSim();
+    window.print();
+  });
+  document.getElementById('copySummaryBtn').addEventListener('click', async () => {
+    if (!lastCalc) return;
+    const text = buildSummary(lastCalc.inputs, lastCalc.onlyPos, lastCalc.withPay);
+    try {
+      await navigator.clipboard.writeText(text);
+      document.getElementById('copySummaryBtn').textContent = 'Copiato ✓';
+      setTimeout(() => { document.getElementById('copySummaryBtn').textContent = 'Copia riepilogo'; }, 1500);
+    } catch (e) {
+      prompt('Copia il riepilogo:', text);
+    }
+  });
+
+  renderPresets();
+  renderHistory();
   updateSim();
 </script>
+</body>
+</html>
